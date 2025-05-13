@@ -13,7 +13,7 @@ public class LevelSelection : MonoBehaviour
     {
         levelButton = GetComponent<Button>();
 
-        if(DataManager.gameData.playerData.maxLevel < level)
+        if(DataManager.gameData.playerData.levels[level-1].isCompleted)
         {
             levelButton.interactable = false;
             GetComponentInChildren<TextMeshProUGUI>().color = levelButton.colors.disabledColor;

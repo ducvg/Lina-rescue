@@ -6,7 +6,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public int currentLevel = 0; 
     [HideInInspector] public GameObject currentLevelObject;
-    public GameObject levelCompletePanel;
+    public GameObject completePanel;
+    public GameObject pausePanel;
 
     void Awake()
     {
@@ -17,6 +18,8 @@ public class GameManager : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(gameObject);
+
+        DataManager.Load();
     }
 
     public GameObject[] levelPrefab;
@@ -33,6 +36,18 @@ public class GameManager : MonoBehaviour
 
     public void LevelComplete()
     {
-        
+        Time.timeScale = 0;
+        completePanel.SetActive(true);
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0;
+        pausePanel.SetActive(true);
+    }
+
+    void OnApplicationQuit()
+    {
+        DataManager.Save();
     }
 }

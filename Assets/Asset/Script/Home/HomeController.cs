@@ -19,6 +19,7 @@ public class HomeController : MonoBehaviour
     public void QuitGame()
     {
         Debug.Log("Game Exited");
+        DataManager.Save();
         Application.Quit();
     }
 }
