@@ -38,7 +38,6 @@ public class Movement : MonoBehaviour
 
         if(jumpAction.IsPressed() && IsGrounded())
         {
-            Debug.Log("Jump");
             isJumping = true;   
         }
         if(jumpAction.WasReleasedThisFrame() && rb.linearVelocityY > 0)
@@ -50,8 +49,6 @@ public class Movement : MonoBehaviour
     private bool IsGrounded()
     {
         var hit = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
-        Debug.Log(hit != null);
-
         return hit;
     }
 

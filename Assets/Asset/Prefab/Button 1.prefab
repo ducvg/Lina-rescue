@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 843707665042104646}
   - component: {fileID: 3757535453714622449}
   - component: {fileID: 2094397748998248594}
+  - component: {fileID: 7147128493607816089}
   m_Layer: 0
   m_Name: Button 1
   m_TagString: Untagged
@@ -162,6 +163,28 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortAtRoot: 0
+--- !u!95 &7147128493607816089
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100241634886224932}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ab295bdd032f0c54dba1d324e106ead5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7513540383299268861
 GameObject:
   m_ObjectHideFlags: 0
