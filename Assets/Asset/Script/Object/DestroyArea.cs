@@ -1,16 +1,32 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
-public class DestroyArea : MonoBehaviour
+public class AreaCleaner : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private Vector2Int areaSize = new Vector2Int(0,0);
+    [SerializeField] private Tilemap groundmap;
+
+    public void ClearArea(Vector2Int areaSize)
     {
-        
+        this.areaSize = areaSize;
+        ClearArea();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ClearArea()
     {
+        if(groundmap == null)
+        {
+            Debug.LogError("Groundmap is not assigned.");
+            return;
+        }
         
+        Vector3Int position = groundmap.WorldToCell(transform.position);
+        for (int x = -areaSize.x; x <= areaSize.x; x++)
+        {
+            for (int y = -areaSize.y; y <= areaSize.y; y++)
+            {
+                groundmap.SetTile(position + new Vector3Int(x, y, 0), null);
+            }
+        }
     }
 }
