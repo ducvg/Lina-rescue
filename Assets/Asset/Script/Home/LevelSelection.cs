@@ -13,11 +13,21 @@ public class LevelSelection : MonoBehaviour
     {
         levelButton = GetComponent<Button>();
 
-        if(DataManager.gameData.playerData.maxLevel < level)
-        {
-            levelButton.interactable = false;
-            GetComponentInChildren<TextMeshProUGUI>().color = levelButton.colors.disabledColor;
-        }
+        
+    }
+
+    private void Start()
+    {
+        // if(DataManager.gameData.playerData.levels.ContainsKey(level))
+        // {
+        //     DataManager.gameData.playerData.levels[level] = new LevelData(level);
+        // } else {
+        //     if(DataManager.gameData.playerData.levels[level-1].isCompleted && level != 1)
+        //     {
+        //         levelButton.interactable = false;
+        //         GetComponentInChildren<TextMeshProUGUI>().color = levelButton.colors.disabledColor;
+        //     }
+        // }
     }
 
     public void LoadLevel()

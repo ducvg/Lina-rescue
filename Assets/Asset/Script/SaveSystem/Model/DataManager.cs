@@ -25,6 +25,6 @@ public static class DataManager
 public class GameData 
 {
     public PlayerData playerData = new();
-    // public MapData mapData = new();
+    public MapData mapData = new();
     //more ?1
 }
