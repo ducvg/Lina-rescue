@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "jillejr.newtonsoft.json-for-unity.converters": "https://github.com/jilleJr/Newtonsoft.Json-for-Unity.Converters.git#1.0.0",
     "com.qiaozhilei.easy-text-effects": "https://github.com/LeiQiaoZhi/Easy-Text-Effect.git",
     "com.unity.2d.animation": "10.2.0",
     "com.unity.2d.aseprite": "1.2.4",

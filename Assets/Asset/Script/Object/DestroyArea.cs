@@ -4,7 +4,12 @@ using UnityEngine.Tilemaps;
 public class AreaCleaner : MonoBehaviour
 {
     [SerializeField] private Vector2Int areaSize = new Vector2Int(0,0);
-    [SerializeField] private Tilemap groundmap;
+    [HideInInspector] private Tilemap groundmap;
+
+    private void Awake()
+    {
+        groundmap = FindFirstObjectByType<Tilemap>();
+    }
 
     public void ClearArea(Vector2Int areaSize)
     {
@@ -21,11 +26,11 @@ public class AreaCleaner : MonoBehaviour
         }
         
         Vector3Int position = groundmap.WorldToCell(transform.position);
-        for (int x = -areaSize.x; x <= areaSize.x; x++)
+        for (int x = 0; x <= areaSize.x; x++)
         {
-            for (int y = -areaSize.y; y <= areaSize.y; y++)
+            for (int y = 0; y <= areaSize.y; y++)
             {
-                groundmap.SetTile(position + new Vector3Int(x, y, 0), null);
+                TilemapEditor.RemoveTile(groundmap, position + new Vector3Int(x, y, 0));
             }
         }
     }

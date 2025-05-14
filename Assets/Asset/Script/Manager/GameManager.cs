@@ -17,22 +17,11 @@ public class GameManager : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
 
-        DataManager.Load();
     }
 
     public GameObject[] levelPrefab;
-
-    public void LoadLevel(int levelIndex)
-    {
-        if (currentLevelObject != null)
-        {
-            Destroy(currentLevelObject);
-        }
-        currentLevel = levelIndex;
-        currentLevelObject = Instantiate(levelPrefab[levelIndex]);
-    }
 
     public void LevelComplete()
     {
@@ -49,5 +38,16 @@ public class GameManager : MonoBehaviour
     void OnApplicationQuit()
     {
         DataManager.Save();
+    }
+
+
+    public void LoadLevel(int levelIndex)
+    {
+        if (currentLevelObject != null)
+        {
+            Destroy(currentLevelObject);
+        }
+        currentLevel = levelIndex;
+        currentLevelObject = Instantiate(levelPrefab[levelIndex]);
     }
 }

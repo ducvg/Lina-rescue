@@ -6,6 +6,7 @@ using UnityEngine;
 [Serializable]
 public class PlayerData
 {
-    public Dictionary<int, LevelData> levels = new(); 
+    public Vector3 position;
+    
 
 }
