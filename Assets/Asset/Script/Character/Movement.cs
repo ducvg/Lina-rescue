@@ -40,7 +40,7 @@ public class Movement : MonoBehaviour
         {
             isJumping = true;   
         }
-        if(jumpAction.WasReleasedThisFrame() && rb.linearVelocityY > 0)
+        if(jumpAction.WasReleasedThisFrame())
         {
             isJumpCut = true;
         }
@@ -60,7 +60,7 @@ public class Movement : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpForce);
             isJumping = false;
         }
-        if (isJumpCut)
+        if (isJumpCut && rb.linearVelocityY > 0)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocityX, rb.linearVelocityY * 0.5f);
             isJumpCut = false;
