@@ -10,6 +10,7 @@ using UnityEngine.Tilemaps;
 public class MovableBlock : MonoBehaviour
 {
     [SerializeField] private List<Vector2Int> movePositionsList;
+    public bool ogState = true;
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private TileBase groundTile;
     private Tilemap groundmap;
@@ -20,7 +21,12 @@ public class MovableBlock : MonoBehaviour
         groundmap = FindFirstObjectByType<Tilemap>();
         movePositions = new Queue<Vector2Int>(movePositionsList);
         ogSpot = transform.position;
-        endSpot = movePositionsList.Last();
+
+    }
+
+    void Start()
+    {
+         if(!ogState) gameObject.SetActive(false); 
     }
 
     public void StartMove()
@@ -57,6 +63,7 @@ public class MovableBlock : MonoBehaviour
         }
         // Set the tile at the final position
         TilemapEditor.PlaceTile(groundmap, groundmap.WorldToCell(transform.position), groundTile);
+        this.gameObject.SetActive(false);
     }
 
     private Vector2 ogSpot;

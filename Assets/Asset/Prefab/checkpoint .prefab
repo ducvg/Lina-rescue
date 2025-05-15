@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5979877b7f313464c9f015fe2cf680c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: cp
+  isActivated: 0
 --- !u!68 &1770202973645476793
 EdgeCollider2D:
   m_ObjectHideFlags: 0
@@ -82,8 +84,8 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: 2.9679136, y: 2.64582}
-  - {x: 2.9568315, y: -0.37797427}
+  - {x: 0, y: 3}
+  - {x: 0, y: -0.81}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0

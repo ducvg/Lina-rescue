@@ -47,7 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movePositionsList:
-  - {x: -2, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
   - {x: 0, y: -3}
   moveSpeed: 6
   groundTile: {fileID: 11400000, guid: afee6b0cecd83b24d9f5445c4ec29607, type: 2}
