@@ -358,28 +358,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2349519197506343351, guid: a86dabb9198f4a84ca5fe4fa0d219025, type: 3}
-      propertyPath: movePositionsList.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2349519197506343351, guid: a86dabb9198f4a84ca5fe4fa0d219025, type: 3}
-      propertyPath: movePositionsList.Array.data[0].x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2349519197506343351, guid: a86dabb9198f4a84ca5fe4fa0d219025, type: 3}
       propertyPath: movePositionsList.Array.data[0].y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2349519197506343351, guid: a86dabb9198f4a84ca5fe4fa0d219025, type: 3}
       propertyPath: movePositionsList.Array.data[1].x
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2349519197506343351, guid: a86dabb9198f4a84ca5fe4fa0d219025, type: 3}
-      propertyPath: movePositionsList.Array.data[1].y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2349519197506343351, guid: a86dabb9198f4a84ca5fe4fa0d219025, type: 3}
-      propertyPath: movePositionsList.Array.data[2].x
-      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 2349519197506343351, guid: a86dabb9198f4a84ca5fe4fa0d219025, type: 3}
       propertyPath: movePositionsList.Array.data[2].y
