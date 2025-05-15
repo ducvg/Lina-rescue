@@ -4,10 +4,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public int currentLevel = 0; 
-    [HideInInspector] public GameObject currentLevelObject;
     public GameObject completePanel;
     public GameObject pausePanel;
+    public float timer = 0f;
 
     void Awake()
     {
@@ -21,18 +20,9 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public GameObject[] levelPrefab;
-
-    public void LevelComplete()
+    void Update()
     {
-        Time.timeScale = 0;
-        completePanel.SetActive(true);
-    }
-
-    public void PauseGame()
-    {
-        Time.timeScale = 0;
-        pausePanel.SetActive(true);
+        timer += Time.deltaTime;
     }
 
     void OnApplicationQuit()
@@ -40,14 +30,10 @@ public class GameManager : MonoBehaviour
         DataManager.Save();
     }
 
-
-    public void LoadLevel(int levelIndex)
+    public void Win()
     {
-        if (currentLevelObject != null)
-        {
-            Destroy(currentLevelObject);
-        }
-        currentLevel = levelIndex;
-        currentLevelObject = Instantiate(levelPrefab[levelIndex]);
+        InputManager.instance.playerInputs.Player.Disable();
+        completePanel.SetActive(true);
+        if(DataManager.gameData.playerData.bestTime < timer) DataManager.gameData.playerData.bestTime = timer;
     }
 }

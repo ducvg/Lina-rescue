@@ -11,27 +11,35 @@ public class MovableBlock : MonoBehaviour
 {
     [SerializeField] private List<Vector2Int> movePositionsList;
     public bool ogState = true;
+    [SerializeField] private bool mergeAtEnd = true;
     [SerializeField] private float moveSpeed = 2f;
     [SerializeField] private TileBase groundTile;
     private Tilemap groundmap;
     private Queue<Vector2Int> movePositions = new();
+    private SpriteRenderer spriteRenderer;
 
     void Awake()
     {
         groundmap = FindFirstObjectByType<Tilemap>();
         movePositions = new Queue<Vector2Int>(movePositionsList);
         ogSpot = transform.position;
-
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        cellPos = groundmap.WorldToCell(transform.position);
     }
 
     void Start()
     {
-         if(!ogState) gameObject.SetActive(false); 
+        if (!ogState)
+        {
+            spriteRenderer.enabled = false;
+            gameObject.SetActive(false); 
+        }    
     }
 
+    private Vector3Int cellPos;
     public void StartMove()
     {
-        TilemapEditor.RemoveTile(groundmap, groundmap.WorldToCell(transform.position)); //remove at start position        
+        if (mergeAtEnd && movePositionsList[0] != Vector2.zero) TilemapEditor.RemoveTile(groundmap, cellPos); //remove at start position   
         StartCoroutine(Move());
     }
 
@@ -41,10 +49,12 @@ public class MovableBlock : MonoBehaviour
         {
             Vector2Int offset = movePositions.Dequeue();
             Vector2 startPos = transform.position;
-            Vector2 endPos = startPos + offset;
+            Vector3 endPos = startPos + offset;
+
 
             if (offset == Vector2Int.zero)
             {
+                spriteRenderer.enabled = false;
                 float waitTime = 1f / moveSpeed; // Same as time to move 1 unit
                 float timer = 0f;
                 while (timer < waitTime)
@@ -54,20 +64,26 @@ public class MovableBlock : MonoBehaviour
                 }
                 continue;
             }
+            else if (mergeAtEnd && groundmap.HasTile(groundmap.WorldToCell(startPos))) TilemapEditor.RemoveTile(groundmap, groundmap.WorldToCell(startPos)); //remove at start position   
 
-            while ((Vector2)transform.position != endPos)
+            spriteRenderer.enabled = true;
+
+            while (transform.position != endPos)
             {
                 transform.position = Vector2.MoveTowards(transform.position, endPos, moveSpeed * Time.deltaTime);
                 yield return null;
             }
         }
-        // Set the tile at the final position
-        TilemapEditor.PlaceTile(groundmap, groundmap.WorldToCell(transform.position), groundTile);
-        this.gameObject.SetActive(false);
+        
+        if(mergeAtEnd)
+        {
+            TilemapEditor.PlaceTile(groundmap, groundmap.WorldToCell(transform.position), groundTile);
+            gameObject.SetActive(false);
+        }
+        movePositions = new Queue<Vector2Int>(movePositionsList); //WTF??? insane
     }
 
     private Vector2 ogSpot;
-    private Vector2 endSpot;
 
     public void Reset()
     {

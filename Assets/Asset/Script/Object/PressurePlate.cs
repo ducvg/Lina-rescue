@@ -62,8 +62,9 @@ public class PressurePlate : MonoBehaviour
         foreach (var block in blocks)
         {
             block.gameObject.SetActive(block.ogState);
-            _collider.enabled = true;
             block.Reset();
         }
+        _collider.enabled = true;
+        isActivated = false;
     }
 }

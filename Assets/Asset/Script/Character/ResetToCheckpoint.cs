@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ResetToCheckpoint : MonoBehaviour
 {
+    [SerializeField] private ParticleSystem resetParticle;
 
     private void Awake()
     {
@@ -25,7 +26,8 @@ public class ResetToCheckpoint : MonoBehaviour
     {
         Debug.Log(DataManager.gameData.playerData.position);
         
-        SaveManager.instance.LoadMap();
+        Instantiate(resetParticle, transform.position, Quaternion.identity);
+        SaveManager.instance.IngameLoad();
         transform.position = DataManager.gameData.playerData.position;
     }
 }

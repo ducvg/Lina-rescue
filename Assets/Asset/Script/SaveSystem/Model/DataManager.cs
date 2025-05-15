@@ -14,11 +14,21 @@ public static class DataManager
 
     public static void Load()
     {
-        gameData =  SaveSystem.LoadLocal<GameData>("/save.sav", false);
-        if (gameData == null)
+        try
         {
-            gameData = new();
+            gameData =  SaveSystem.LoadLocal<GameData>("/save.sav", false);
         }
+        catch (Exception e)
+        {
+            UnityEngine.Debug.LogError("Failed to load game data: " + e.Message);
+        } finally
+        {
+            if (gameData == null)
+            {
+                gameData = new();
+            }
+        }
+        
     }
 }
 
