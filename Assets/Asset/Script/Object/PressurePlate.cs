@@ -30,7 +30,8 @@ public class PressurePlate : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D collision)
-    { 
+    {
+        // SoundManager.Instance.Play("ppTrigger");
         animator.SetTrigger(triggerAnimation);
         if(areaCleaner != null) areaCleaner.ClearArea();
         foreach (var block in blocks)

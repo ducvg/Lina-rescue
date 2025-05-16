@@ -1,10 +1,9 @@
-using System;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public class ResetToCheckpoint : MonoBehaviour
 {
     [SerializeField] private ParticleSystem resetParticle;
+    private AudioSource audioSource;
 
     private void Awake()
     {
@@ -28,8 +27,19 @@ public class ResetToCheckpoint : MonoBehaviour
 
     private void ResetNeatestCheckpoint(UnityEngine.InputSystem.InputAction.CallbackContext context)
     {
+        Reset();
+    }
+
+    public void Reset()
+    {
         Debug.Log(DataManager.gameData.playerData.position);
-        
+        if (!audioSource)
+        {
+            audioSource = SoundManager.Instance.CachedPlay("reset"); //scuff caching
+        } else
+        {
+            audioSource.Play();
+        }
         Instantiate(resetParticle, transform.position, Quaternion.identity);
         SaveManager.instance.IngameLoad();
         transform.position = DataManager.gameData.playerData.position;

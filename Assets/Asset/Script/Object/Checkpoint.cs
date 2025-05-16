@@ -1,5 +1,3 @@
-using Mono.Cecil.Cil;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 public class Checkpoint : MonoBehaviour

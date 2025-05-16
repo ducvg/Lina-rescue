@@ -69,9 +69,10 @@ public static class SaveSystem
         var relativePath = Application.persistentDataPath + loadPath;
         try
         {
-            if(!File.Exists(relativePath))
+            if (!File.Exists(relativePath))
             {
-                throw new FileNotFoundException($"No save file at {relativePath}");
+                Debug.LogError($"No save file at {relativePath}");
+                return default;
             }
 
             T data;
@@ -81,12 +82,19 @@ public static class SaveSystem
             } else {
                 data = JsonConvert.DeserializeObject<T>(File.ReadAllText(relativePath));
             }
-            if(data == null) throw new NullReferenceException("data null");
+            if (data == null)
+            {
+                Debug.LogError($"data null, maybe failed to deserialize data from {relativePath}");
+                return default;
+            }
             Debug.Log("Load success");
             return data;
         }
         catch (Exception e)
         {
+            File.Delete(relativePath); //delete the corrupted file
+            DataManager.isCorrupted = true;
+            Application.Quit(); 
             throw new Exception($"Failed to load game data: {e.Message}, \n {e.StackTrace}", e);   
         }
     }

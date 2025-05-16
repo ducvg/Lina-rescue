@@ -1,19 +1,25 @@
 using System;
-using Mono.Cecil.Cil;
 using TMPro;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
+    [SerializeField] private GameObject winPanel;
+
     [SerializeField] private TextMeshProUGUI currentTimeText;
     [SerializeField] private TextMeshProUGUI bestTimeText;
 
-
+    public static MenuManager instance;
     void Awake()
     {
- 
+        if (instance != null && instance != this)
+        {
+            DestroyImmediate(gameObject);
+            return;
+        }
+        instance = this;
+
     }
 
     private void Pause(UnityEngine.InputSystem.InputAction.CallbackContext context)
@@ -40,14 +46,24 @@ public class MenuManager : MonoBehaviour
 
     public void Win()
     {
+        SoundManager.Instance.Stop("ingame");
+        SoundManager.Instance.Play("win");
+
+        currentTimeText.text = TimeSpan.FromSeconds(GameManager.instance.timer).ToString("mm:ss");
         bestTimeText.text = TimeSpan.FromSeconds(DataManager.gameData.playerData.bestTime).ToString("mm:ss");
 
+        InputManager.instance.playerInputs.Player.Disable();
+        InputManager.instance.playerInputs.UI.Disable();
         Time.timeScale = 0;
-        GameManager.instance.Win();
+        
+        winPanel.SetActive(true);
+        if(DataManager.gameData.playerData.bestTime < GameManager.instance.timer) DataManager.gameData.playerData.bestTime = GameManager.instance.timer;
     }
 
     public void Restart()
     {
+        SoundManager.Instance.Stop("ingame");
+        SoundManager.Instance.Stop("win");
         InputManager.instance.playerInputs.Player.Enable();
         Time.timeScale = 1;
         DataManager.gameData = new GameData();

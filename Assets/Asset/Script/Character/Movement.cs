@@ -14,7 +14,7 @@ public class Movement : MonoBehaviour
     private int moveAnimation = Animator.StringToHash("isMove");
 
     public bool isFacingRight;
-    private float moveInput;
+    private Vector2 moveInput;
     private bool isJumping, isJumpCut;
 
     private InputAction moveAction;
@@ -34,13 +34,13 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        moveInput =  moveAction.ReadValue<float>();
+        moveInput = moveAction.ReadValue<Vector2>();
 
-        if(jumpAction.IsPressed() && IsGrounded())
+        if (jumpAction.IsPressed() && IsGrounded())
         {
-            isJumping = true;   
+            isJumping = true;
         }
-        if(jumpAction.WasReleasedThisFrame())
+        if (jumpAction.WasReleasedThisFrame())
         {
             isJumpCut = true;
         }
@@ -69,14 +69,21 @@ public class Movement : MonoBehaviour
 
     private bool MoveControl()
     {
-        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocityY);
-
-        if (moveInput > 0 && !isFacingRight)
+        rb.linearVelocityX = moveInput.normalized.x * speed;
+        if (moveInput.x > 0 && !isFacingRight)
             Flip();
-        else if (moveInput < 0 && isFacingRight)
+        else if (moveInput.x < 0 && isFacingRight)
             Flip();
+        return Mathf.Abs(moveInput.x) > 0.1f;
+        
+        // rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocityY);
 
-        return Mathf.Abs(moveInput) > 0.1f;
+        // if (moveInput > 0 && !isFacingRight)
+        //     Flip();
+        // else if (moveInput < 0 && isFacingRight)
+        //     Flip();
+
+        // return Mathf.Abs(moveInput) > 0.1f;
     }
 
     private void Flip()

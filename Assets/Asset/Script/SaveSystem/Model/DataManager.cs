@@ -5,11 +5,18 @@ using Unity.Collections.LowLevel.Unsafe;
 [Serializable]
 public static class DataManager
 {
+    public static bool isCorrupted = false;
     public static GameData gameData = new();
 
     public static void Save()
     {
-        SaveSystem.SaveLocal("/save.sav",gameData, false);
+        if (!isCorrupted)
+        {
+            SaveSystem.SaveLocal("/save.sav",gameData, false);
+        } else
+        {
+            UnityEngine.Debug.LogError("Game data is corrupted, save disable.");
+        }
     }
 
     public static bool Load()

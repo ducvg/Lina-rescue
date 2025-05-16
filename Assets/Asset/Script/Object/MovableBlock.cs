@@ -17,9 +17,11 @@ public class MovableBlock : MonoBehaviour
     private Tilemap groundmap;
     private Queue<Vector2Int> movePositions = new();
     private SpriteRenderer spriteRenderer;
+    private AudioSource audioSource;
 
     void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
         groundmap = FindFirstObjectByType<Tilemap>();
         movePositions = new Queue<Vector2Int>(movePositionsList);
         ogSpot = transform.position;
@@ -65,7 +67,7 @@ public class MovableBlock : MonoBehaviour
                 continue;
             }
             else if (mergeAtEnd && groundmap.HasTile(groundmap.WorldToCell(startPos))) TilemapEditor.RemoveTile(groundmap, groundmap.WorldToCell(startPos)); //remove at start position   
-
+            if(audioSource) audioSource.Play();
             spriteRenderer.enabled = true;
 
             while (transform.position != endPos)
@@ -80,6 +82,7 @@ public class MovableBlock : MonoBehaviour
             TilemapEditor.PlaceTile(groundmap, groundmap.WorldToCell(transform.position), groundTile);
             gameObject.SetActive(false);
         }
+        if(audioSource) audioSource.Stop();
         movePositions = new Queue<Vector2Int>(movePositionsList); //WTF??? insane
     }
 
@@ -88,6 +91,7 @@ public class MovableBlock : MonoBehaviour
     public void Reset()
     {
         StopAllCoroutines();
+        if(audioSource) audioSource.Stop();
         movePositions = new Queue<Vector2Int>(movePositionsList);
         transform.position = ogSpot;
     }

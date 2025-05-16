@@ -15,6 +15,7 @@ public class HoverButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        SoundManager.Instance.Play("buttonHover");
         normal.SetActive(false);
         hover.SetActive(true);
     }
