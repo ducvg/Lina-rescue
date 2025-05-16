@@ -29,7 +29,9 @@ public class HomeController : MonoBehaviour
 
     public void Restart()
     {
-        DataManager.gameData = new(); // Reset game data
+        var temp = DataManager.gameData.playerData.bestTime;
+        DataManager.gameData = new();
+        DataManager.gameData.playerData.bestTime = temp;
         SceneManager.LoadScene("MainGame");
         Debug.Log("Game Restarted");
     }

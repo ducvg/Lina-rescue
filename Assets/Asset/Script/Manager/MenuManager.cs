@@ -49,15 +49,24 @@ public class MenuManager : MonoBehaviour
         SoundManager.Instance.Stop("ingame");
         SoundManager.Instance.Play("win");
 
-        currentTimeText.text = TimeSpan.FromSeconds(GameManager.instance.timer).ToString("mm:ss");
-        bestTimeText.text = TimeSpan.FromSeconds(DataManager.gameData.playerData.bestTime).ToString("mm:ss");
+        int minute = Mathf.FloorToInt(GameManager.instance.timer / 60);
+        int second = Mathf.FloorToInt(GameManager.instance.timer % 60);
+        currentTimeText.text = String.Format("{0:00} : {1:00}", minute, second);
+
+        minute = Mathf.FloorToInt(DataManager.gameData.playerData.bestTime / 60);
+        second = Mathf.FloorToInt(DataManager.gameData.playerData.bestTime % 60);
+
+        bestTimeText.text = String.Format("{0:00} : {1:00}", minute, second);
 
         InputManager.instance.playerInputs.Player.Disable();
         InputManager.instance.playerInputs.UI.Disable();
         Time.timeScale = 0;
-        
+
         winPanel.SetActive(true);
-        if(DataManager.gameData.playerData.bestTime < GameManager.instance.timer) DataManager.gameData.playerData.bestTime = GameManager.instance.timer;
+        if (DataManager.gameData.playerData.bestTime > GameManager.instance.timer) DataManager.gameData.playerData.bestTime = GameManager.instance.timer;
+        var temp = DataManager.gameData.playerData.bestTime;
+        DataManager.gameData = new();
+        DataManager.gameData.playerData.bestTime = temp;
     }
 
     public void Restart()
@@ -66,7 +75,9 @@ public class MenuManager : MonoBehaviour
         SoundManager.Instance.Stop("win");
         InputManager.instance.playerInputs.Player.Enable();
         Time.timeScale = 1;
-        DataManager.gameData = new GameData();
+        var temp = DataManager.gameData.playerData.bestTime;
+        DataManager.gameData = new();
+        DataManager.gameData.playerData.bestTime = temp;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

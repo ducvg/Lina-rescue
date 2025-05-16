@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public GameObject completePanel;
     public GameObject pausePanel;
-    public double timer = 0f;
+    public float timer = 0f;
 
     void Awake()
     {
