@@ -4,10 +4,20 @@ using UnityEngine.SceneManagement;
 public class HomeController : MonoBehaviour
 {
     public bool allowLoad = false;
+    public bool allowSave = true;
+    [SerializeField] private static bool isLoaded = false;
 
     public void Start()
     {
-        if(allowLoad) DataManager.Load();
+        if (allowLoad && !isLoaded && DataManager.Load())
+        {
+            isLoaded = true;
+            Debug.Log("Game Loaded");
+        }
+        else
+        {
+            Debug.Log("New game ");
+        }
 
     }
 
@@ -27,7 +37,19 @@ public class HomeController : MonoBehaviour
     public void QuitGame()
     {
         Debug.Log("Game Exited");
-        DataManager.Save();
         Application.Quit();
+    }
+
+    void OnApplicationQuit()
+    {
+        if (allowSave)
+        {
+            DataManager.Save();
+            Debug.Log("Game Saved");
+        }
+        else
+        {
+            Debug.Log("Game Not Saved");
+        }
     }
 }

@@ -7,6 +7,6 @@ using UnityEngine;
 public class PlayerData
 {
     public Vector3 position;
-    public float bestTime;
+    public double bestTime;
 
 }

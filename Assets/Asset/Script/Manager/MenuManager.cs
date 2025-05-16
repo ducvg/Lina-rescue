@@ -11,24 +11,32 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bestTimeText;
 
 
-    // void Awake()
-    // {
+    void Awake()
+    {
  
+    }
 
-    //     InputManager.instance.playerInputs.UI.Pause.performed += PauseGame;
-    // }
+    private void Pause(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        Pause();
+    }
 
-    // private void OnEnable()
-    // {
-    //     InputManager.instance.playerInputs.UI.Enable();
-    //     InputManager.instance.playerInputs.UI.Pause.Enable();
-    // }
 
-    // private void OnDisable()
-    // {
-    //     InputManager.instance.playerInputs.UI.Disable();
-    //     InputManager.instance.playerInputs.UI.Pause.Disable();
-    // }
+    private void OnEnable()
+    {
+        InputManager.instance.playerInputs.UI.Enable();
+        InputManager.instance.playerInputs.UI.Pause.Enable();
+
+        InputManager.instance.playerInputs.UI.Pause.performed += Pause;
+    }
+
+    private void OnDisable()
+    {
+        InputManager.instance.playerInputs.UI.Disable();
+        InputManager.instance.playerInputs.UI.Pause.Disable();
+
+        InputManager.instance.playerInputs.UI.Pause.performed -= Pause;
+    }
 
     public void Win()
     {
@@ -53,17 +61,17 @@ public class MenuManager : MonoBehaviour
         {
             InputManager.instance.playerInputs.Player.Enable();
             Time.timeScale = 1;
-            GameManager.instance.completePanel.SetActive(false);
-            isPaused = true;
+            GameManager.instance.pausePanel.SetActive(false);
+            isPaused = false;
         }
         else
         {
-            currentTimeText.text = TimeSpan.FromSeconds(GameManager.instance.timer).ToString("mm:ss");
+            // currentTimeText.text = TimeSpan.FromSeconds(GameManager.instance.timer).ToString("mm:ss");
 
             InputManager.instance.playerInputs.Player.Disable();
             Time.timeScale = 0;
             GameManager.instance.pausePanel.SetActive(true);
-            isPaused = false;
+            isPaused = true;
         }
     }
 

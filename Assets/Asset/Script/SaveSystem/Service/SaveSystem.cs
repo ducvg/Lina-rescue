@@ -87,8 +87,7 @@ public static class SaveSystem
         }
         catch (Exception e)
         {
-            Debug.LogError($"Load failed: {e.Message}\n{e.StackTrace}");
-            return default;
+            throw new Exception($"Failed to load game data: {e.Message}, \n {e.StackTrace}", e);   
         }
     }
 

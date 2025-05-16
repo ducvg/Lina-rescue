@@ -12,23 +12,26 @@ public static class DataManager
         SaveSystem.SaveLocal("/save.sav",gameData, false);
     }
 
-    public static void Load()
+    public static bool Load()
     {
         try
         {
-            gameData =  SaveSystem.LoadLocal<GameData>("/save.sav", false);
+            gameData = SaveSystem.LoadLocal<GameData>("/save.sav", false);
         }
         catch (Exception e)
         {
             UnityEngine.Debug.LogError("Failed to load game data: " + e.Message);
-        } finally
+            gameData = new();
+            return false;
+        }
+        finally
         {
             if (gameData == null)
             {
                 gameData = new();
             }
         }
-        
+        return true;
     }
 }
 

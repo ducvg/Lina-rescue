@@ -8,18 +8,22 @@ public class ResetToCheckpoint : MonoBehaviour
 
     private void Awake()
     {
-        DataManager.gameData.playerData.position = transform.position;
-        InputManager.instance.playerInputs.Player.Reset.performed += ResetNeatestCheckpoint;
+        if (DataManager.gameData.playerData.position == null || DataManager.gameData.playerData.position == Vector3.zero) DataManager.gameData.playerData.position = transform.position;
     }
 
     void OnEnable()
     {
         InputManager.instance.playerInputs.Player.Reset.Enable();
+
+        InputManager.instance.playerInputs.Player.Reset.performed += ResetNeatestCheckpoint;
     }
 
     void OnDisable()
     {
         InputManager.instance.playerInputs.Player.Reset.Disable();
+
+        InputManager.instance.playerInputs.Player.Reset.performed -= ResetNeatestCheckpoint;
+
     }
 
     private void ResetNeatestCheckpoint(UnityEngine.InputSystem.InputAction.CallbackContext context)
