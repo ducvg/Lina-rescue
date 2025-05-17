@@ -30,6 +30,17 @@ public class Movement : MonoBehaviour
     {
         moveAction = InputManager.instance.playerInputs.Player.Move;
         jumpAction = InputManager.instance.playerInputs.Player.Jump;
+
+    }
+
+    private void OnEnable()
+    {
+        jumpAction.canceled += ctx => isJumpCut = true;
+    }
+
+    private void OnDisable()
+    {
+        jumpAction.canceled -= ctx => isJumpCut = true;
     }
 
     private void Update()
