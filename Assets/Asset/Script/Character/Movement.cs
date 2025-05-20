@@ -8,6 +8,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float jumpForce = 8f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+    public FixedJoystick joystick;
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -33,28 +34,31 @@ public class Movement : MonoBehaviour
 
     }
 
-    private void OnEnable()
-    {
-        jumpAction.canceled += ctx => isJumpCut = true;
-    }
+    // private void OnEnable()
+    // {
+    //     jumpAction.canceled += ctx => isJumpCut = true;
+    // }
 
-    private void OnDisable()
-    {
-        jumpAction.canceled -= ctx => isJumpCut = true;
-    }
+    // private void OnDisable()
+    // {
+    //     jumpAction.canceled -= ctx => isJumpCut = true;
+    // }
 
     private void Update()
     {
         moveInput = moveAction.ReadValue<Vector2>();
+        // float horizontal = joystick.Horizontal;
+        // float vertical = joystick.Vertical;
+        // moveInput = new Vector2(horizontal, vertical);
 
         if (jumpAction.IsPressed() && IsGrounded())
         {
             isJumping = true;
         }
-        if (jumpAction.WasReleasedThisFrame())
-        {
-            isJumpCut = true;
-        }
+        // if (jumpAction.WasReleasedThisFrame())
+        // {
+        //     isJumpCut = true;
+        // }
     }
 
     private bool IsGrounded()
@@ -71,11 +75,11 @@ public class Movement : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpForce);
             isJumping = false;
         }
-        if (isJumpCut && rb.linearVelocityY > 0)
-        {
-            rb.linearVelocity = new Vector2(rb.linearVelocityX, rb.linearVelocityY * 0.5f);
-            isJumpCut = false;
-        }
+        // if (isJumpCut && rb.linearVelocityY > 0)
+        // {
+        //     rb.linearVelocity = new Vector2(rb.linearVelocityX, rb.linearVelocityY * 0.5f);
+        //     isJumpCut = false;
+        // }
     }
 
     private bool MoveControl()
@@ -85,7 +89,7 @@ public class Movement : MonoBehaviour
             Flip();
         else if (moveInput.x < 0 && isFacingRight)
             Flip();
-        return Mathf.Abs(moveInput.x) > 0.1f;
+        return Mathf.Abs(moveInput.x) > 0.001f;
         
         // rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocityY);
 

@@ -32,8 +32,9 @@ public class HomeController : MonoBehaviour
         var temp = DataManager.gameData.playerData.bestTime;
         DataManager.gameData = new();
         DataManager.gameData.playerData.bestTime = temp;
+        Debug.Log("Game Restarted 1");
         SceneManager.LoadScene("MainGame");
-        Debug.Log("Game Restarted");
+        Debug.Log("Game Restarted 2");
     }
 
     public void QuitGame()
