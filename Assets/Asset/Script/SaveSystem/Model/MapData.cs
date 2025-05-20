@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,6 +12,8 @@ public class MapData
     // public Dictionary<int, bool> blocksData = new();
     public Dictionary<string, bool> checkpointsData = new();
     // public Dictionary<float[], bool> tilemapData = new();
+    
+    [JsonConverter(typeof(Vector3IntKeyDictionaryConverter<bool>))]
     public Dictionary<Vector3Int, bool> tilemapData = new();
 }
 

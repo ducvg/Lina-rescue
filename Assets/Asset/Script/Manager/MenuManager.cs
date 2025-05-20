@@ -1,48 +1,83 @@
 using System;
-using Mono.Cecil.Cil;
 using TMPro;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
+    [SerializeField] private GameObject winPanel;
+
     [SerializeField] private TextMeshProUGUI currentTimeText;
     [SerializeField] private TextMeshProUGUI bestTimeText;
 
+    public static MenuManager instance;
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            DestroyImmediate(gameObject);
+            return;
+        }
+        instance = this;
 
-    // void Awake()
-    // {
- 
+    }
 
-    //     InputManager.instance.playerInputs.UI.Pause.performed += PauseGame;
-    // }
+    private void Pause(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    {
+        Pause();
+    }
 
-    // private void OnEnable()
-    // {
-    //     InputManager.instance.playerInputs.UI.Enable();
-    //     InputManager.instance.playerInputs.UI.Pause.Enable();
-    // }
 
-    // private void OnDisable()
-    // {
-    //     InputManager.instance.playerInputs.UI.Disable();
-    //     InputManager.instance.playerInputs.UI.Pause.Disable();
-    // }
+    private void OnEnable()
+    {
+        InputManager.instance.playerInputs.UI.Enable();
+        InputManager.instance.playerInputs.UI.Pause.Enable();
+
+        InputManager.instance.playerInputs.UI.Pause.performed += Pause;
+    }
+
+    private void OnDisable()
+    {
+        InputManager.instance.playerInputs.UI.Disable();
+        InputManager.instance.playerInputs.UI.Pause.Disable();
+
+        InputManager.instance.playerInputs.UI.Pause.performed -= Pause;
+    }
 
     public void Win()
     {
-        bestTimeText.text = TimeSpan.FromSeconds(DataManager.gameData.playerData.bestTime).ToString("mm:ss");
+        SoundManager.Instance.Stop("ingame");
+        SoundManager.Instance.Play("win");
 
+        int minute = Mathf.FloorToInt(GameManager.instance.timer / 60);
+        int second = Mathf.FloorToInt(GameManager.instance.timer % 60);
+        currentTimeText.text = String.Format("{0:00} : {1:00}", minute, second);
+
+        minute = Mathf.FloorToInt(DataManager.gameData.playerData.bestTime / 60);
+        second = Mathf.FloorToInt(DataManager.gameData.playerData.bestTime % 60);
+
+        bestTimeText.text = String.Format("{0:00} : {1:00}", minute, second);
+
+        InputManager.instance.playerInputs.Player.Disable();
+        InputManager.instance.playerInputs.UI.Disable();
         Time.timeScale = 0;
-        GameManager.instance.Win();
+
+        winPanel.SetActive(true);
+        if (DataManager.gameData.playerData.bestTime > GameManager.instance.timer) DataManager.gameData.playerData.bestTime = GameManager.instance.timer;
+        var temp = DataManager.gameData.playerData.bestTime;
+        DataManager.gameData = new();
+        DataManager.gameData.playerData.bestTime = temp;
     }
 
     public void Restart()
     {
+        SoundManager.Instance.Stop("ingame");
+        SoundManager.Instance.Stop("win");
         InputManager.instance.playerInputs.Player.Enable();
         Time.timeScale = 1;
-        DataManager.gameData = new GameData();
+        var temp = DataManager.gameData.playerData.bestTime;
+        DataManager.gameData = new();
+        DataManager.gameData.playerData.bestTime = temp;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
@@ -53,17 +88,17 @@ public class MenuManager : MonoBehaviour
         {
             InputManager.instance.playerInputs.Player.Enable();
             Time.timeScale = 1;
-            GameManager.instance.completePanel.SetActive(false);
-            isPaused = true;
+            GameManager.instance.pausePanel.SetActive(false);
+            isPaused = false;
         }
         else
         {
-            currentTimeText.text = TimeSpan.FromSeconds(GameManager.instance.timer).ToString("mm:ss");
+            // currentTimeText.text = TimeSpan.FromSeconds(GameManager.instance.timer).ToString("mm:ss");
 
             InputManager.instance.playerInputs.Player.Disable();
             Time.timeScale = 0;
             GameManager.instance.pausePanel.SetActive(true);
-            isPaused = false;
+            isPaused = true;
         }
     }
 

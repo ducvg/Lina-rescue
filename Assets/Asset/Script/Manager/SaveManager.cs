@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -26,7 +25,6 @@ public class SaveManager : MonoBehaviour
         GameLoad();
     }
 
-    public int checkpointCount = 0;
     [SerializeField] private TileBase groundTile;
     [SerializeField] private Tilemap groundTilemap;
     [SerializeField] private GameObject player;
@@ -108,53 +106,63 @@ public class SaveManager : MonoBehaviour
 
     public void GameLoad()
     {
-        player.transform.position = DataManager.gameData.playerData.position;
-
-        foreach (var box in boxes)
+        try
         {
-            box.transform.position = DataManager.gameData.mapData.boxData[box.id];
-            box.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
-        }
+            Debug.Log("player position: " + player.transform.position+"\nloaded: " + DataManager.gameData.playerData.position);
+            player.transform.position = DataManager.gameData.playerData.position;
 
-        foreach (var checkpoint in checkpoints)
+            foreach (var box in boxes)
+            {
+                box.transform.position = DataManager.gameData.mapData.boxData[box.id];
+                box.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            }
+
+            foreach (var checkpoint in checkpoints)
+            {
+                if (DataManager.gameData.mapData.checkpointsData[checkpoint.id])
+                {
+                    Destroy(checkpoint);
+                }
+            }
+
+            foreach (var pressurePlate in pressurePlates)
+            {
+                if (DataManager.gameData.mapData.pressurePlatesData[pressurePlate.id])
+                {
+                    pressurePlate.SkipActivate();
+                }
+                else
+                {
+                    pressurePlate.Reset();
+                }
+            }
+
+            foreach (var tile in DataManager.gameData.mapData.tilemapData)
+            {
+                if (tile.Value)
+                {
+                    groundTilemap.SetTile(tile.Key, groundTile);
+                }
+                else
+                {
+                    groundTilemap.SetTile(tile.Key, null);
+                }
+            }
+
+            //load tilemap
+            //undo all unsaved block movements
+            // var unsaveStack = new Stack<(Vector3Int position, bool state)>(unsavedBlockProcedures);
+            // while (unsaveStack.Count > 0)
+            // {
+            //     var unsavedBlockProcedure = unsaveStack.Pop();
+            //     groundTilemap.SetTile(unsavedBlockProcedure.position, !unsavedBlockProcedure.state ? groundTile : null);
+            // }
+        }
+        catch (Exception e)
         {
-            if (DataManager.gameData.mapData.checkpointsData[checkpoint.id])
-            {
-                Destroy(checkpoint);
-            }
+            Debug.LogError("Failed to load game data: " + e.Message);
         }
-
-        foreach (var pressurePlate in pressurePlates)
-        {
-            if (DataManager.gameData.mapData.pressurePlatesData[pressurePlate.id])
-            {
-                pressurePlate.SkipActivate();
-            }
-            else
-            {
-                pressurePlate.Reset();
-            }
-        }
-
-        foreach(var tile in DataManager.gameData.mapData.tilemapData)
-        {
-            if (tile.Value)
-            {
-                groundTilemap.SetTile(tile.Key, groundTile);
-            }
-            else
-            {
-                groundTilemap.SetTile(tile.Key, null);
-            }
-        }
-
-        //load tilemap
-        //undo all unsaved block movements
-        // var unsaveStack = new Stack<(Vector3Int position, bool state)>(unsavedBlockProcedures);
-        // while (unsaveStack.Count > 0)
-        // {
-        //     var unsavedBlockProcedure = unsaveStack.Pop();
-        //     groundTilemap.SetTile(unsavedBlockProcedure.position, !unsavedBlockProcedure.state ? groundTile : null);
-        // }
+        Debug.Log("SaveManager data Loaded");
+        
     }
 }

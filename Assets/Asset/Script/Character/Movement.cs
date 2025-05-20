@@ -8,13 +8,14 @@ public class Movement : MonoBehaviour
     [SerializeField] private float jumpForce = 8f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+    public FixedJoystick joystick;
 
     private Rigidbody2D rb;
     private Animator animator;
     private int moveAnimation = Animator.StringToHash("isMove");
 
     public bool isFacingRight;
-    private float moveInput;
+    private Vector2 moveInput;
     private bool isJumping, isJumpCut;
 
     private InputAction moveAction;
@@ -30,20 +31,34 @@ public class Movement : MonoBehaviour
     {
         moveAction = InputManager.instance.playerInputs.Player.Move;
         jumpAction = InputManager.instance.playerInputs.Player.Jump;
+
     }
+
+    // private void OnEnable()
+    // {
+    //     jumpAction.canceled += ctx => isJumpCut = true;
+    // }
+
+    // private void OnDisable()
+    // {
+    //     jumpAction.canceled -= ctx => isJumpCut = true;
+    // }
 
     private void Update()
     {
-        moveInput =  moveAction.ReadValue<float>();
+        moveInput = moveAction.ReadValue<Vector2>();
+        // float horizontal = joystick.Horizontal;
+        // float vertical = joystick.Vertical;
+        // moveInput = new Vector2(horizontal, vertical);
 
-        if(jumpAction.IsPressed() && IsGrounded())
+        if (jumpAction.IsPressed() && IsGrounded())
         {
-            isJumping = true;   
+            isJumping = true;
         }
-        if(jumpAction.WasReleasedThisFrame())
-        {
-            isJumpCut = true;
-        }
+        // if (jumpAction.WasReleasedThisFrame())
+        // {
+        //     isJumpCut = true;
+        // }
     }
 
     private bool IsGrounded()
@@ -60,23 +75,30 @@ public class Movement : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocityX, jumpForce);
             isJumping = false;
         }
-        if (isJumpCut && rb.linearVelocityY > 0)
-        {
-            rb.linearVelocity = new Vector2(rb.linearVelocityX, rb.linearVelocityY * 0.5f);
-            isJumpCut = false;
-        }
+        // if (isJumpCut && rb.linearVelocityY > 0)
+        // {
+        //     rb.linearVelocity = new Vector2(rb.linearVelocityX, rb.linearVelocityY * 0.5f);
+        //     isJumpCut = false;
+        // }
     }
 
     private bool MoveControl()
     {
-        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocityY);
-
-        if (moveInput > 0 && !isFacingRight)
+        rb.linearVelocityX = moveInput.normalized.x * speed;
+        if (moveInput.x > 0 && !isFacingRight)
             Flip();
-        else if (moveInput < 0 && isFacingRight)
+        else if (moveInput.x < 0 && isFacingRight)
             Flip();
+        return Mathf.Abs(moveInput.x) > 0.001f;
+        
+        // rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocityY);
 
-        return Mathf.Abs(moveInput) > 0.1f;
+        // if (moveInput > 0 && !isFacingRight)
+        //     Flip();
+        // else if (moveInput < 0 && isFacingRight)
+        //     Flip();
+
+        // return Mathf.Abs(moveInput) > 0.1f;
     }
 
     private void Flip()

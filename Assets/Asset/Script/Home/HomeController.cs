@@ -4,10 +4,20 @@ using UnityEngine.SceneManagement;
 public class HomeController : MonoBehaviour
 {
     public bool allowLoad = false;
+    public bool allowSave = true;
+    [SerializeField] private static bool isLoaded = false;
 
     public void Start()
     {
-        if(allowLoad) DataManager.Load();
+        if (allowLoad && !isLoaded && DataManager.Load())
+        {
+            isLoaded = true;
+            Debug.Log("Game Loaded");
+        }
+        else
+        {
+            Debug.Log("New game ");
+        }
 
     }
 
@@ -19,15 +29,30 @@ public class HomeController : MonoBehaviour
 
     public void Restart()
     {
-        DataManager.gameData = new(); // Reset game data
+        var temp = DataManager.gameData.playerData.bestTime;
+        DataManager.gameData = new();
+        DataManager.gameData.playerData.bestTime = temp;
+        Debug.Log("Game Restarted 1");
         SceneManager.LoadScene("MainGame");
-        Debug.Log("Game Restarted");
+        Debug.Log("Game Restarted 2");
     }
 
     public void QuitGame()
     {
         Debug.Log("Game Exited");
-        DataManager.Save();
         Application.Quit();
+    }
+
+    void OnApplicationQuit()
+    {
+        if (allowSave)
+        {
+            DataManager.Save();
+            Debug.Log("Game Saved");
+        }
+        else
+        {
+            Debug.Log("Game Not Saved");
+        }
     }
 }

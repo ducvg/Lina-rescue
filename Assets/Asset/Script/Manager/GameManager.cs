@@ -12,12 +12,18 @@ public class GameManager : MonoBehaviour
     {
         if (instance != null && instance != this)
         {
-            Destroy(gameObject);
+            DestroyImmediate(gameObject);
             return;
         }
         instance = this;
         // DontDestroyOnLoad(gameObject);
 
+    }
+
+    void Start()
+    {
+        SoundManager.Instance.Stop("background");
+        SoundManager.Instance.Play("ingame");
     }
 
     void Update()
@@ -30,10 +36,4 @@ public class GameManager : MonoBehaviour
         DataManager.Save();
     }
 
-    public void Win()
-    {
-        InputManager.instance.playerInputs.Player.Disable();
-        completePanel.SetActive(true);
-        if(DataManager.gameData.playerData.bestTime < timer) DataManager.gameData.playerData.bestTime = timer;
-    }
 }
